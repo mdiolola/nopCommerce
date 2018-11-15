@@ -233,8 +233,34 @@ set @resources='
   <LocaleResource Name="Plugins.Payments.Square.Fields.Location.Select">
     <Value>Select location</Value>
   </LocaleResource>
-</Language>
-'
+  <LocaleResource Name="ActivityLog.UploadNewIconsArchive">
+    <Value>Uploaded a new favicon and app icons archive</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Configuration.FaviconAndAppIcons.Uploaded">
+    <Value>Favicon and app icons have been uploaded</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Configuration.Settings.GeneralCommon.BlockTitle.FaviconAndAppIcons">
+    <Value>Favicon and app icons</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Configuration.Settings.GeneralCommon.FaviconAndAppIcons.UploadIconsArchive">
+    <Value>Upload icons archive</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Configuration.Settings.GeneralCommon.FaviconAndAppIcons.UploadIconsArchive.Hint">
+    <Value>Upload archive with favicon and app icons for different operating systems and devices. Detailed instructions for installing favicon and app icons are in wwwroot/icons/samples, current store_id = </Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Configuration.Settings.GeneralCommon.FaviconAndAppIcons.PageHeadCode">
+    <Value><![CDATA[Code for the <head> element]]></Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Configuration.Settings.GeneralCommon.FaviconAndAppIcons.PageHeadCode.Hint">
+    <Value><![CDATA[Enter the code for the document metadata element(<head>) with <link> and <meta> tags for favicon and app icons.If you use a special favicon generator it generates this code automatically and you can simply copy and paste it.]]></Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Common.FaviconAndAppIcons.HeadCodeError">
+    <Value>Head code loading error.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Configuration.Settings.GeneralCommon.FaviconAndAppIcon.Description">
+    <Value>Favicon and app icons are small pictures associated with a particular website or web page. They are displayed by the browser in the tab before the page title, and as a picture next to a bookmark, in tabs and in other interface elements. Detailed instructions for installing favicon and app icons are in wwwroot/icons/samples.</Value>
+  </LocaleResource>
+</Language>'
 
 CREATE TABLE #LocaleStringResourceTmp
 	(
@@ -1016,6 +1042,14 @@ IF NOT EXISTS (SELECT 1 FROM [Setting] WHERE [Name] = N'catalogsettings.exportim
 BEGIN
     INSERT [Setting] ([Name], [Value], [StoreId])
     VALUES (N'catalogsettings.exportimportproductuselimitedtostores', N'False', 0)
+END
+GO
+
+  --new setting
+IF NOT EXISTS (SELECT 1 FROM [Setting] WHERE [Name] = N'commonsettings.faviconandappiconsheadcode')
+BEGIN
+    INSERT [Setting] ([Name], [Value], [StoreId])
+    VALUES (N'commonsettings.faviconandappiconsheadcode', N'<link rel="apple-touch-icon" sizes="180x180" href="/icons/icons_1/apple-touch-icon.png?v=E65oBpnwxK"><link rel="icon" type="image/png" sizes="32x32" href="/icons/icons_1/favicon-32x32.png?v=E65oBpnwxK"><link rel="icon" type="image/png" sizes="192x192" href="/icons/icons_1/android-chrome-192x192.png?v=E65oBpnwxK"><link rel="icon" type="image/png" sizes="16x16" href="/icons/icons_1/favicon-16x16.png?v=E65oBpnwxK"><link rel="manifest" href="/icons/icons_1/site.webmanifest?v=E65oBpnwxK"><link rel="mask-icon" href="/icons/icons_1/safari-pinned-tab.svg?v=E65oBpnwxK" color="#5bbad5"><link rel="shortcut icon" href="/icons/icons_1/favicon.ico?v=E65oBpnwxK"><meta name="msapplication-TileColor" content="#2d89ef"><meta name="msapplication-TileImage" content="/icons/icons_1/mstile-144x144.png?v=E65oBpnwxK"><meta name="msapplication-config" content="/icons/icons_1/browserconfig.xml?v=E65oBpnwxK"><meta name="theme-color" content="#ffffff">', 0)
 END
 GO
 

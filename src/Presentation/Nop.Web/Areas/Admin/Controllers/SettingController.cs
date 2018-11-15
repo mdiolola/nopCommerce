@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Nop.Core;
 using Nop.Core.Configuration;
@@ -30,6 +31,7 @@ using Nop.Services.Logging;
 using Nop.Services.Media;
 using Nop.Services.Messages;
 using Nop.Services.Orders;
+using Nop.Services.Plugins;
 using Nop.Services.Security;
 using Nop.Services.Stores;
 using Nop.Web.Areas.Admin.Factories;
@@ -67,6 +69,8 @@ namespace Nop.Web.Areas.Admin.Controllers
         private readonly IStoreContext _storeContext;
         private readonly IStoreService _storeService;
         private readonly IWorkContext _workContext;
+        private readonly IWebHelper _webHelper;
+        private readonly IUploadService _uploadService;
         private readonly NopConfig _config;
 
         #endregion
@@ -92,6 +96,8 @@ namespace Nop.Web.Areas.Admin.Controllers
             IStoreContext storeContext,
             IStoreService storeService,
             IWorkContext workContext,
+            IWebHelper webHelper,
+            IUploadService uploadService,
             NopConfig config)
         {
             this._addressService = addressService;
@@ -113,6 +119,8 @@ namespace Nop.Web.Areas.Admin.Controllers
             this._storeContext = storeContext;
             this._storeService = storeService;
             this._workContext = workContext;
+            this._webHelper = webHelper;
+            this._uploadService = uploadService;
             this._config = config;
         }
 
@@ -1209,6 +1217,9 @@ namespace Nop.Web.Areas.Admin.Controllers
             //use response compression
             commonSettings.UseResponseCompression = model.StoreInformationSettings.UseResponseCompression;
 
+            //favicon and app icons head code
+            commonSettings.FaviconAndAppIconsHeadCode = model.FaviconAndAppIconSettings.HeadCode;
+
             //we do not clear cache after each setting update.
             //this behavior can increase performance because cached settings will not be cleared 
             //and loaded from database after each update
@@ -1231,6 +1242,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             _settingService.SaveSettingOverridablePerStore(commonSettings, x => x.SitemapIncludeProducts, model.StoreInformationSettings.SitemapIncludeProducts_OverrideForStore, storeScope, false);
             _settingService.SaveSettingOverridablePerStore(commonSettings, x => x.SitemapIncludeProductTags, model.StoreInformationSettings.SitemapIncludeProductTags_OverrideForStore, storeScope, false);
             _settingService.SaveSettingOverridablePerStore(commonSettings, x => x.UseResponseCompression, model.StoreInformationSettings.UseResponseCompression_OverrideForStore, storeScope, false);
+            _settingService.SaveSettingOverridablePerStore(commonSettings, x => x.FaviconAndAppIconsHeadCode, model.FaviconAndAppIconSettings.HeadCode_OverrideForStore, storeScope, false);
 
             //now clear settings cache
             _settingService.ClearCache();
@@ -1269,6 +1281,9 @@ namespace Nop.Web.Areas.Admin.Controllers
             _settingService.SaveSettingOverridablePerStore(seoSettings, x => x.TwitterMetaTags, model.SeoSettings.TwitterMetaTags_OverrideForStore, storeScope, false);
             _settingService.SaveSettingOverridablePerStore(seoSettings, x => x.OpenGraphMetaTags, model.SeoSettings.OpenGraphMetaTags_OverrideForStore, storeScope, false);
             _settingService.SaveSettingOverridablePerStore(seoSettings, x => x.CustomHeadTags, model.SeoSettings.CustomHeadTags_OverrideForStore, storeScope, false);
+
+            //now clear settings cache
+            _settingService.ClearCache();
 
             //now clear settings cache
             _settingService.ClearCache();
@@ -1576,6 +1591,39 @@ namespace Nop.Web.Areas.Admin.Controllers
 
             return RedirectToAction("GeneralCommon");
         }
+
+        [HttpPost]
+        public virtual IActionResult UploadIconsArchive(IFormFile archivefile)
+        {
+            if (!_permissionService.Authorize(StandardPermissionProvider.ManageSettings))
+                return AccessDeniedView();
+
+            try
+            {
+                if (archivefile == null || archivefile.Length == 0)
+                {
+                    _notificationService.ErrorNotification(_localizationService.GetResource("Admin.Common.UploadFile"));
+                    return RedirectToAction("GeneralCommon");
+                }
+
+               _uploadService.UploadIconsArchive(archivefile);
+
+                //activity log
+                _customerActivityService.InsertActivity("UploadIconsArchive", _localizationService.GetResource("ActivityLog.UploadNewIconsArchive"));
+
+                _notificationService.SuccessNotification(_localizationService.GetResource("Admin.Configuration.FaviconAndAppIcons.Uploaded"));
+
+                //restart application
+                _webHelper.RestartAppDomain();
+            }
+            catch (Exception exc)
+            {
+                _notificationService.ErrorNotification(exc);
+            }
+
+            return RedirectToAction("GeneralCommon");
+        }
+
 
         public virtual IActionResult AllSettings()
         {
