@@ -954,6 +954,15 @@ namespace Nop.Web.Controllers
             var mpn = _productService.FormatMpn(product, attributeXml);
             var gtin = _productService.FormatGtin(product, attributeXml);
 
+            // calculating weight adjustment
+            var attributeValues = _productAttributeParser.ParseProductAttributeValues(attributeXml);
+            decimal weightAdjustment = decimal.Zero;
+
+            foreach (var item in attributeValues)
+            {
+                weightAdjustment += item.WeightAdjustment;
+            }
+
             //price
             var price = "";
             //base price
@@ -971,7 +980,7 @@ namespace Nop.Web.Controllers
                 var finalPriceWithDiscountBase = _taxService.GetProductPrice(product, finalPrice, out decimal _);
                 var finalPriceWithDiscount = _currencyService.ConvertFromPrimaryStoreCurrency(finalPriceWithDiscountBase, _workContext.WorkingCurrency);
                 price = _priceFormatter.FormatPrice(finalPriceWithDiscount);
-                basepricepangv = _priceFormatter.FormatBasePrice(product, finalPriceWithDiscountBase);
+                basepricepangv = _priceFormatter.FormatBasePrice(product, finalPriceWithDiscountBase, weightAdjustment);
             }
 
             //stock
