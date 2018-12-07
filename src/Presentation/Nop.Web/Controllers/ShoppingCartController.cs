@@ -956,11 +956,11 @@ namespace Nop.Web.Controllers
 
             // calculating weight adjustment
             var attributeValues = _productAttributeParser.ParseProductAttributeValues(attributeXml);
-            decimal weightAdjustment = decimal.Zero;
+            decimal totalWeight = product.BasepriceAmount;
 
             foreach (var item in attributeValues)
             {
-                weightAdjustment += item.WeightAdjustment;
+                totalWeight += item.WeightAdjustment;
             }
 
             //price
@@ -980,7 +980,7 @@ namespace Nop.Web.Controllers
                 var finalPriceWithDiscountBase = _taxService.GetProductPrice(product, finalPrice, out decimal _);
                 var finalPriceWithDiscount = _currencyService.ConvertFromPrimaryStoreCurrency(finalPriceWithDiscountBase, _workContext.WorkingCurrency);
                 price = _priceFormatter.FormatPrice(finalPriceWithDiscount);
-                basepricepangv = _priceFormatter.FormatBasePrice(product, finalPriceWithDiscountBase, weightAdjustment);
+                basepricepangv = _priceFormatter.FormatBasePrice(product, finalPriceWithDiscountBase, totalWeight);
             }
 
             //stock
