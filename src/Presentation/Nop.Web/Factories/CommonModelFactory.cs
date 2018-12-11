@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Text;
-using System.Web;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Routing;
@@ -24,7 +22,6 @@ using Nop.Core.Domain.Vendors;
 using Nop.Core.Infrastructure;
 using Nop.Services.Catalog;
 using Nop.Services.Common;
-using Nop.Services.Configuration;
 using Nop.Services.Customers;
 using Nop.Services.Directory;
 using Nop.Services.Forums;
@@ -35,7 +32,6 @@ using Nop.Services.Security;
 using Nop.Services.Seo;
 using Nop.Services.Themes;
 using Nop.Services.Topics;
-using Nop.Web.Areas.Admin.Models.Settings;
 using Nop.Web.Framework.Themes;
 using Nop.Web.Framework.UI;
 using Nop.Web.Infrastructure.Cache;
@@ -63,7 +59,6 @@ namespace Nop.Web.Factories
         private readonly ICustomerService _customerService;
         private readonly IForumService _forumService;
         private readonly IGenericAttributeService _genericAttributeService;
-        private readonly IHostingEnvironment _hostingEnvironment;
         private readonly ILanguageService _languageService;
         private readonly ILocalizationService _localizationService;
         private readonly IManufacturerService _manufacturerService;
@@ -84,7 +79,6 @@ namespace Nop.Web.Factories
         private readonly IUrlRecordService _urlRecordService;
         private readonly IWebHelper _webHelper;
         private readonly IWorkContext _workContext;
-        private readonly ISettingService _settingService;
         private readonly LocalizationSettings _localizationSettings;
         private readonly NewsSettings _newsSettings;
         private readonly StoreInformationSettings _storeInformationSettings;
@@ -107,7 +101,6 @@ namespace Nop.Web.Factories
             ICustomerService customerService,
             IForumService forumService,
             IGenericAttributeService genericAttributeService,
-            IHostingEnvironment hostingEnvironment,
             ILanguageService languageService,
             ILocalizationService localizationService,
             IManufacturerService manufacturerService,
@@ -128,7 +121,6 @@ namespace Nop.Web.Factories
             IUrlRecordService urlRecordService,
             IWebHelper webHelper,
             IWorkContext workContext,
-            ISettingService settingService,
             LocalizationSettings localizationSettings,
             NewsSettings newsSettings,
             StoreInformationSettings storeInformationSettings,
@@ -147,7 +139,6 @@ namespace Nop.Web.Factories
             this._customerService = customerService;
             this._forumService = forumService;
             this._genericAttributeService = genericAttributeService;
-            this._hostingEnvironment = hostingEnvironment;
             this._languageService = languageService;
             this._localizationService = localizationService;
             this._manufacturerService = manufacturerService;
@@ -168,7 +159,6 @@ namespace Nop.Web.Factories
             this._urlRecordService = urlRecordService;
             this._webHelper = webHelper;
             this._workContext = workContext;
-            this._settingService = settingService;
             this._localizationSettings = localizationSettings;
             this._newsSettings = newsSettings;
             this._storeInformationSettings = storeInformationSettings;
@@ -728,12 +718,9 @@ namespace Nop.Web.Factories
         /// <returns>Favicon model</returns>
         public virtual FaviconAndAppIconsModel PrepareFaviconAndAppIconsModel()
         {
-            var storeId = _storeContext.ActiveStoreScopeConfiguration;
-            var commonSettings = _settingService.LoadSetting<CommonSettings>(storeId);
-
             var model = new FaviconAndAppIconsModel()
             {
-                HeadCode = commonSettings.FaviconAndAppIconsHeadCode
+                HeadCode = _commonSettings.FaviconAndAppIconsHeadCode
             };
 
             return model;

@@ -1417,6 +1417,7 @@ INSERT [dbo].[ActivityLogType] ([Id], [SystemKeyword], [Name], [Enabled]) VALUES
 INSERT [dbo].[ActivityLogType] ([Id], [SystemKeyword], [Name], [Enabled]) VALUES (147, N'DeleteLanguage', N'Delete a language', 1)
 INSERT [dbo].[ActivityLogType] ([Id], [SystemKeyword], [Name], [Enabled]) VALUES (148, N'DeleteMeasureDimension', N'Delete a measure dimension', 1)
 INSERT [dbo].[ActivityLogType] ([Id], [SystemKeyword], [Name], [Enabled]) VALUES (149, N'UploadNewTheme', N'Upload a theme', 1)
+INSERT [dbo].[ActivityLogType] ([Id], [SystemKeyword], [Name], [Enabled]) VALUES (150, N'UploadIconsArchive', N'Upload a favicon and app icons archive', 1)
 SET IDENTITY_INSERT [dbo].[ActivityLogType] OFF
 GO
 

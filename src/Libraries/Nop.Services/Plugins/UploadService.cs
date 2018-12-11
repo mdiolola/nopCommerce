@@ -15,27 +15,27 @@ using Nop.Services.Themes;
 namespace Nop.Services.Plugins
 {
     /// <summary>
-    /// Represents the implementation of a service for uploading application extensions (plugins or themes)
+    /// Represents the implementation of a service for uploading application extensions (plugins or themes) and favicon and app icons
     /// </summary>
     public class UploadService : IUploadService
     {
         #region Fields
 
-        protected readonly INopFileProvider _fileProvider;
-        protected readonly IThemeProvider _themeProvider;
+        private readonly INopFileProvider _fileProvider;
         private readonly IStoreContext _storeContext;
+        private readonly IThemeProvider _themeProvider;
 
         #endregion
 
         #region Ctor
 
         public UploadService(INopFileProvider fileProvider,
-            IThemeProvider themeProvider,
-            IStoreContext storeContext)
+            IStoreContext storeContext,
+            IThemeProvider themeProvider)
         {
             this._fileProvider = fileProvider;
-            this._themeProvider = themeProvider;
             this._storeContext = storeContext;
+            this._themeProvider = themeProvider;
         }
 
         #endregion
@@ -354,7 +354,7 @@ namespace Nop.Services.Plugins
             }
             finally
             {
-                //delete the zip file and leave only unpacked images in the folder
+                //delete the zip file and leave only unpacked files in the folder
                 if (!string.IsNullOrEmpty(zipFilePath))
                     _fileProvider.DeleteFile(zipFilePath);
             }

@@ -156,6 +156,27 @@
                         </div>
                     </div>
                 </div>
+                
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        @T("Admin.Configuration.Settings.GeneralCommon.BlockTitle.FaviconAndAppIcons")
+                    </div>
+                    <div class="panel-body">
+                        <p>
+                            @T("Admin.Configuration.Settings.GeneralCommon.FaviconAndAppIcons.Description")
+                        </p>
+                        <div class="form-group advanced-setting">
+                            <div class="col-md-3"></div>
+                            <div class="col-md-9">
+                                <button type="button" name="uploadiconsarchive" class="btn bg-olive" data-toggle="modal" data-target="#uploadiconsarchive-window">
+                                    <i class="fa fa-upload"></i>
+                                    @T("Admin.Configuration.Settings.GeneralCommon.FaviconAndAppIcons.UploadIconsArchive")
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
 
                 <div class="panel panel-default advanced-setting">
                     <div class="panel-heading">
@@ -234,7 +255,7 @@
                         </div>
                     </div>
                 </div>
-
+            
                 <div class="panel panel-default advanced-setting">
                     <div class="panel-heading">
                         @T("Admin.Configuration.Settings.GeneralCommon.BlockTitle.FooterItems")
@@ -665,33 +686,6 @@
                             <div class="col-md-9">
                                 <nop-textarea asp-for="SeoSettings.CustomHeadTags" />
                                 <span asp-validation-for="SeoSettings.CustomHeadTags"></span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        @T("Admin.Configuration.Settings.GeneralCommon.BlockTitle.FaviconAndAppIcons")
-                    </div>
-                    <div class="panel-body">
-                        @T("Admin.Configuration.Settings.GeneralCommon.FaviconAndAppIcon.Description")
-                        <div class="form-group advanced-setting">
-                            <div class="col-md-3">
-                                <nop-override-store-checkbox asp-for="FaviconAndAppIconSettings.HeadCode_OverrideForStore" asp-input="FaviconAndAppIconSettings.HeadCode" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
-                                <nop-label asp-for="FaviconAndAppIconSettings.HeadCode" />
-                            </div>
-                            <div class="col-md-9">
-                                <nop-editor asp-for="FaviconAndAppIconSettings.HeadCode" />
-                                <span asp-validation-for="FaviconAndAppIconSettings.HeadCode"></span>
-                            </div>
-                        </div>
-                        <div class="form-group advanced-setting">
-                            <div class="col-md-3"></div>
-                            <div class="col-md-9">
-                                <button type="button" name="uploadiconsarchive" class="btn bg-olive" data-toggle="modal" data-target="#uploadiconsarchive-window">
-                                    <i class="fa fa-upload"></i>
-                                    @T("Admin.Configuration.Settings.GeneralCommon.FaviconAndAppIcons.UploadIconsArchive")
-                                </button>
                             </div>
                         </div>
                     </div>
@@ -1142,7 +1136,7 @@
                     <div class="modal-body">
                         <ul class="common-list">
                             <li>
-                                @T("Admin.Configuration.Settings.GeneralCommon.FaviconAndAppIcons.UploadIconsArchive.Hint")@Model.ActiveStoreScopeConfiguration
+                                @string.Format(T("Admin.Configuration.Settings.GeneralCommon.FaviconAndAppIcons.UploadIconsArchive.Hint").Text, Model.ActiveStoreScopeConfiguration)
                             </li>
                         </ul>
                         <div class="form-group">

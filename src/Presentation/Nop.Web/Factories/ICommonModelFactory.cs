@@ -1,5 +1,4 @@
 ﻿using Nop.Core.Domain.Vendors;
-using Nop.Web.Areas.Admin.Models.Settings;
 using Nop.Web.Models.Common;
 
 namespace Nop.Web.Factories

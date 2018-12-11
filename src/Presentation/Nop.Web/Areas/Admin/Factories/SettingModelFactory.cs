@@ -405,30 +405,6 @@ namespace Nop.Web.Areas.Admin.Factories
             return model;
         }
 
-        /// <summary>
-        /// Prepare favicon and app icons settings model
-        /// </summary>
-        /// <returns>Favicon and app settings model</returns>
-        protected virtual FaviconAndAppIconModel PrepareFaviconAndAppIconModel()
-        {
-            //load settings for a chosen store scope
-            var storeId = _storeContext.ActiveStoreScopeConfiguration;
-            var commonSettings = _settingService.LoadSetting<CommonSettings>(storeId);
-
-            //fill in model values from the entity
-            var model = new FaviconAndAppIconModel()
-            {
-                HeadCode = commonSettings.FaviconAndAppIconsHeadCode
-            };
-
-            if (storeId <= 0)
-                return model;
-
-            //fill in overridden values
-            model.HeadCode_OverrideForStore = _settingService.SettingExists(commonSettings, x => x.FaviconAndAppIconsHeadCode, storeId);
-
-            return model;
-        }
 
         /// <summary>
         /// Prepare security settings model
@@ -1401,9 +1377,6 @@ namespace Nop.Web.Areas.Admin.Factories
 
             //prepare captcha settings model
             model.CaptchaSettings = PrepareCaptchaSettingsModel();
-
-            //prepare icons settings model
-            model.FaviconAndAppIconSettings = PrepareFaviconAndAppIconModel();
 
             //prepare PDF settings model
             model.PdfSettings = PreparePdfSettingsModel();

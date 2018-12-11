@@ -1123,7 +1123,7 @@
     <Value>Uninstalled a plugin (FriendlyName: '{0}')</Value>
   </LocaleResource>
   <LocaleResource Name="ActivityLog.UploadNewIconsArchive">
-    <Value>Uploaded a new favicon and app icons archive</Value>
+    <Value>Uploaded a new favicon and app icons archive for store '{0}'</Value>
   </LocaleResource>
   <LocaleResource Name="ActivityLog.UploadNewPlugin">
     <Value>Uploaded a new plugin (FriendlyName: '{0}')</Value>
@@ -4164,9 +4164,6 @@
   <LocaleResource Name="Admin.Common.ExportToXml.Selected">
     <Value>Export to XML (selected)</Value>
   </LocaleResource>
-  <LocaleResource Name="Admin.Common.FaviconAndAppIcons.HeadCodeError">
-    <Value>Error loading head code.</Value>
-  </LocaleResource>
   <LocaleResource Name="Admin.Common.Go">
     <Value>Go</Value>
   </LocaleResource>
@@ -6894,20 +6891,14 @@
   <LocaleResource Name="Admin.Configuration.Settings.GeneralCommon.FacebookLink.Hint">
     <Value>Specify your Facebook page URL. Leave empty if you have no such page.</Value>
   </LocaleResource>
-  <LocaleResource Name="Admin.Configuration.Settings.GeneralCommon.FaviconAndAppIcons.PageHeadCode">
-    <Value><![CDATA[Code for the <head> element]]></Value>
-  </LocaleResource>
-  <LocaleResource Name="Admin.Configuration.Settings.GeneralCommon.FaviconAndAppIcons.PageHeadCode.Hint">
-    <Value><![CDATA[Enter the code for the document metadata element(<head>) with <link> and <meta> tags for favicon and app icons.If you use a special favicon generator it generates this code automatically and you can simply copy and paste it. Important! Do not forget to close the tags in accordance with the requirements of the xml standard.]]></Value>
-  </LocaleResource>
-  <LocaleResource Name="Admin.Configuration.Settings.GeneralCommon.FaviconAndAppIcon.Description">
-    <Value>Favicon and app icons are small pictures associated with a particular website or web page. They are displayed by the browser in the tab before the page title, and as a picture next to a bookmark, in tabs and in other interface elements. Detailed instructions for installing favicon and app icons are in wwwroot/icons/samples.</Value>
+  <LocaleResource Name="Admin.Configuration.Settings.GeneralCommon.FaviconAndAppIcons.Description">
+    <Value>Favicon and app icons are small pictures associated with a particular website or web page. They are displayed by the browser in the tab before the page title, and as a picture next to a bookmark, in tabs and in other interface elements. You can see an example of the favicon and app icons archive in wwwroot/icons/samples.</Value>
   </LocaleResource>
   <LocaleResource Name="Admin.Configuration.Settings.GeneralCommon.FaviconAndAppIcons.UploadIconsArchive">
     <Value>Upload icons archive</Value>
   </LocaleResource>
   <LocaleResource Name="Admin.Configuration.Settings.GeneralCommon.FaviconAndAppIcons.UploadIconsArchive.Hint">
-    <Value>Upload archive with favicon and app icons for different operating systems and devices. Detailed instructions for installing favicon and app icons are in wwwroot/icons/samples, current store_id = </Value>
+    <Value>Upload archive with favicon and app icons for different operating systems and devices. You can see an example of the favicon and app icons archive in wwwroot/icons/samples. Your favicon and app icons path is "icons/icons_{0}"</Value>
   </LocaleResource>
   <LocaleResource Name="Admin.Configuration.Settings.GeneralCommon.ForceSslForAllPages">
     <Value>Force SSL for all site pages</Value>
