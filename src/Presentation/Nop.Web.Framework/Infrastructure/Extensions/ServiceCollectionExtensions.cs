@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.IO.Compression;
 using System.Linq;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.DataProtection;
@@ -29,6 +31,14 @@ using Nop.Web.Framework.Mvc.ModelBinding;
 using Nop.Web.Framework.Mvc.Routing;
 using Nop.Web.Framework.Themes;
 using StackExchange.Profiling.Storage;
+
+
+using WebMarkupMin.AspNet.Brotli;
+using WebMarkupMin.AspNet.Common.Compressors;
+using WebMarkupMin.AspNet.Common.UrlMatchers;
+using WebMarkupMin.AspNetCore2;
+using WebMarkupMin.Core;
+using WebMarkupMin.NUglify;
 
 namespace Nop.Web.Framework.Infrastructure.Extensions
 {
@@ -335,6 +345,77 @@ namespace Nop.Web.Framework.Infrastructure.Extensions
                     !EngineContext.Current.Resolve<StoreInformationSettings>().DisplayMiniProfilerForAdminOnly ||
                     EngineContext.Current.Resolve<IPermissionService>().Authorize(StandardPermissionProvider.AccessAdminPanel);
             }).AddEntityFramework();
+        }
+
+        /// <summary>
+        /// Add and configure WebMarkupMin service
+        /// </summary>
+        /// <param name="services">Collection of service descriptors</param>
+        public static void AddNopWebMarkupMin(this IServiceCollection services)
+        {
+            services
+                .AddWebMarkupMin(options =>
+                {
+                    options.AllowMinificationInDevelopmentEnvironment = true;
+                    options.AllowCompressionInDevelopmentEnvironment = true;
+                    options.DisablePoweredByHttpHeaders = true;
+                })
+                .AddHtmlMinification(options =>
+                {
+                    options.ExcludedPages = new List<IUrlMatcher>
+                    {
+                        new WildcardUrlMatcher("/minifiers/x*ml-minifier"),
+                        new ExactUrlMatcher("/contact")
+                    };
+
+                    HtmlMinificationSettings settings = options.MinificationSettings;
+                    settings.RemoveRedundantAttributes = true;
+                    settings.RemoveHttpProtocolFromAttributes = true;
+                    settings.RemoveHttpsProtocolFromAttributes = true;
+
+                    options.CssMinifierFactory = new NUglifyCssMinifierFactory();
+                    options.JsMinifierFactory = new NUglifyJsMinifierFactory();
+                })
+                .AddXhtmlMinification(options =>
+                {
+                    options.IncludedPages = new List<IUrlMatcher>
+                    {
+                        new WildcardUrlMatcher("/minifiers/x*ml-minifier"),
+                        new ExactUrlMatcher("/contact")
+                    };
+
+                    XhtmlMinificationSettings settings = options.MinificationSettings;
+                    settings.RemoveRedundantAttributes = true;
+                    settings.RemoveHttpProtocolFromAttributes = true;
+                    settings.RemoveHttpsProtocolFromAttributes = true;
+
+                    options.CssMinifierFactory = new KristensenCssMinifierFactory();
+                    options.JsMinifierFactory = new CrockfordJsMinifierFactory();
+                })
+                .AddXmlMinification(options =>
+                {
+                    XmlMinificationSettings settings = options.MinificationSettings;
+                    settings.CollapseTagsWithoutContent = true;
+                })
+                .AddHttpCompression(options =>
+                {
+                    options.CompressorFactories = new List<ICompressorFactory>
+                    {
+                        new BrotliCompressorFactory(new BrotliCompressionSettings
+                        {
+                            Level = 1
+                        }),
+                        new DeflateCompressorFactory(new DeflateCompressionSettings
+                        {
+                            Level = CompressionLevel.Fastest
+                        }),
+                        new GZipCompressorFactory(new GZipCompressionSettings
+                        {
+                            Level = CompressionLevel.Fastest
+                        })
+                    };
+                })
+                ;
         }
     }
 }
