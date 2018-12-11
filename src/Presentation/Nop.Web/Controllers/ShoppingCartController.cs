@@ -956,11 +956,23 @@ namespace Nop.Web.Controllers
 
             // calculating weight adjustment
             var attributeValues = _productAttributeParser.ParseProductAttributeValues(attributeXml);
-            decimal totalWeight = product.BasepriceAmount;
+            var totalWeight = product.BasepriceAmount;
 
-            foreach (var item in attributeValues)
+            foreach (var attributeValue in attributeValues)
             {
-                totalWeight += item.WeightAdjustment;
+                switch (attributeValue.AttributeValueType)
+                {
+                    case AttributeValueType.Simple:
+                        //simple attribute
+                        totalWeight += attributeValue.WeightAdjustment;
+                        break;
+                    case AttributeValueType.AssociatedToProduct:
+                        //bundled product
+                        var associatedProduct = _productService.GetProductById(attributeValue.AssociatedProductId);
+                        if (associatedProduct != null)
+                            totalWeight += associatedProduct.BasepriceAmount * attributeValue.Quantity;
+                        break;
+                }
             }
 
             //price
